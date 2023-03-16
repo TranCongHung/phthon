@@ -1,0 +1,75 @@
+package file.dev;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.List;
+
+import file.dev.dao.Dao;
+import file.dev.dao.DaoImpl;
+import file.dev.model.Circle;
+import file.dev.model.Rect;
+import file.dev.model.Triangle;
+import file.dev.model.Shape;
+
+public class MainApp {
+
+	public static void main(String[] args) {
+		Dao dao =  new DaoImpl();
+		readFromFile(dao);	
+		print(dao.all());
+		dao.sort();
+		print(dao.all());
+	}
+	
+	static void readFromFile(Dao dao) {
+		try {
+			FileInputStream fstream = new FileInputStream("input.txt");
+			BufferedReader br = new BufferedReader(new java.io.InputStreamReader(fstream));
+			String line;
+			while((line = br.readLine()) != null) {
+				if(line.startsWith("#ci")) {
+					Circle cir = readCircle(line, br);
+					dao.insert(cir);
+				}if(line.startsWith("#tr")) {
+					Triangle tr = readTriangle(line, br);
+					dao.insert(tr);
+				}if(line.startsWith("#re")) {
+					Rect re = readRect(line, br);
+					dao.insert(re);
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+	}
+
+	private static Circle readCircle(String line, BufferedReader br) throws NumberFormatException, IOException {
+		Double bk = Double.parseDouble(br.readLine());
+		return new Circle(bk);
+	}
+	
+	private static Rect readRect(String line, BufferedReader br) throws NumberFormatException, IOException {
+//		int code = Integer.parseInt(br.readLine());
+//		int age = Integer.parseInt(br.readLine());
+		double chieuDai = Double.parseDouble(br.readLine());
+		double chieuRong = Double.parseDouble(br.readLine());
+		return new Rect(chieuDai, chieuRong);
+	}
+
+	private static Triangle readTriangle(String line, BufferedReader br) throws NumberFormatException, IOException {
+//		int code = Integer.parseInt(br.readLine());
+//		int age = Integer.parseInt(br.readLine());
+		double a = Double.parseDouble(br.readLine());
+		double b = Double.parseDouble(br.readLine());
+		double c = Double.parseDouble(br.readLine());
+		return new Triangle(a, b, c);
+	}
+	static void print(List<Shape> shapeList) {
+		for (Shape person : shapeList) {
+			System.out.println(shapeList);
+		}
+	}
+
+}
